@@ -1,0 +1,20 @@
+{
+  "name": "serverest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run --e2e",
+    "test:component": "cypress run --component"
+  },
+  "keywords": [],
+  "author": "Anderson Manchini",
+  "license": "ISC",
+  "dependencies": {
+    "babel-loader": "^10.0.0",
+    "cypress": "^14.4.0"
+  }
+}
