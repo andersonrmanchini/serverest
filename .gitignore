@@ -1,0 +1,31 @@
+# Node.js dependencies
+node_modules/
+
+# Cypress generated files
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+cypress/results/       # Common folder for test reports (e.g., Mochawesome)
+cypress/reports/       # Another common folder for test reports
+cypress/.cache/        # Cypress internal cache
+
+# Environment variables and sensitive files
+.env                   # If you use a .env file for sensitive configurations
+cypress.env.json       # If you store sensitive Cypress variables here
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE and OS specific files
+.vscode/               # VS Code configuration folder
+.idea/                 # IntelliJ/WebStorm configuration folder
+.DS_Store              # macOS specific files
+Thumbs.db              # Windows specific files
+
+# Build and output directories (if applicable for any part of your project)
+build/
+dist/
+tmp/
