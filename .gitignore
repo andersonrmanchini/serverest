@@ -29,3 +29,10 @@ Thumbs.db              # Windows specific files
 build/
 dist/
 tmp/
+
+# SSH files
+*.pem
+*.key
+id_rsa
+id_ed25519
+~/.ssh/ 

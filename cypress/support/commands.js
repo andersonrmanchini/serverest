@@ -1,26 +1,22 @@
 // ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
+// cypress/support/command.js
 // ***********************************************
 
-// It fakes an email account
-Cypress.Commands.add('generateRandomEmailSimple', () => {
-  const timestamp = new Date().getTime(); // Obtém o timestamp atual
-  const randomString = Math.random().toString(36).substring(2, 8); // Gera uma string aleatória curta
+// Cria um e-mail fake
+Cypress.Commands.add('geradorEmail', () => {
+  const timestamp = new Date().getTime();
+  const randomString = Math.random().toString(36).substring(2, 8);
 
   return `user_${timestamp}_${randomString}@example.com`;
 })
 
-Cypress.Commands.add('generateRandomStringSimple', (length) => {
+// Gera uma string qualquer
+Cypress.Commands.add('geradorString', (length = 10) => {
   return Math.random().toString(36).substring(2, 2 + length);
 })
 
-Cypress.Commands.add('generateRandomDecimalNumber', () => {
+// Gera um decimal qualquer entre 50 e 150
+Cypress.Commands.add('GeradorNumeroDecimal', () => {
   const scaledNumber = (Math.random() * 150) + 50;
   return parseFloat(scaledNumber.toFixed(2));
 })
@@ -28,9 +24,9 @@ Cypress.Commands.add('generateRandomDecimalNumber', () => {
 Cypress.Commands.add('api', (method, url, body) => {
   return cy.request({
     method: method,
-    url: url,
+    url: $Cypress.env('apiBaseUrl') + url,
     body: body,
-    failOnStatusCode: false // Permite que o Cypress não falhe em status code 4xx ou 5xx, permitindo assertivas sobre eles
+    failOnStatusCode: false 
   });
 });
 

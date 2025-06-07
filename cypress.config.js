@@ -2,12 +2,12 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'http://front.serverest.dev', // URL base da aplicação
+    baseUrl: 'https://front.serverest.dev/',
     env: {
-      apiBaseUrl: 'http://serverest.dev/', // URL da sua API
+      apiBaseUrl: 'https://serverest.dev/'
     },
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', // Para encontrar arquivos de teste E2E
-    supportFile: 'cypress/support/e2e.js', // Arquivo de suporte E2E
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', 
+    supportFile: 'cypress/support/e2e.js', 
     
     setupNodeEvents(on, config) {
       // implement node event listeners here

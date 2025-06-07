@@ -1,29 +1,32 @@
 /// <reference types="cypress" />
 
-describe('Users API Tests', () => {
-
+describe('Usuários: Testes de API', (id) => {
+  var body, _id;
+  
   beforeEach(() => {
-    const user = {
-      "nome": cy.generateRandomStringSimple(10),
-      "email": cy.generateRandomEmailSimple(),
-      "password": cy.generateRandomStringSimple(6),
-      "administrador": "true"
+    body = {
+      nome: cy.geradorString(10),
+      email: cy.geradorEmail(),
+      password: cy.geradorString(6),
+      administrador: "true"
     };
 
-    var _id = '';
+    _id = '';
   });
 
-  it('should be able to add a new user', () => {
-    cy.apiPost(`${Cypress.env('apiBaseUrl')}/usuarios`, this.user)
+  it('Deve ser capaz de adicionar um novo usuário', () => {
+    
+    cy.apiPost('/usuarios', body)
       .then((response) => {
         expect(response.status).to.eq(201);
         expect(response.body.message).to.eq('Cadastro realizado com sucesso');
+
+        id = response.body._id;
       });
-    this._id = response.body._id;
   });
 
-  it('should be able to find an user by ID', () => {
-    cy.apiGet(`${Cypress.env('apiBaseUrl')}/usuarios/${this._id}`)
+  it('Deve ser capaz de encontrar um usuário por seu ID', () => {
+    cy.apiGet(`/usuarios/${Cypress.env('_id')}`)
       .then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.nome).to.eq(user.nome);
@@ -34,27 +37,27 @@ describe('Users API Tests', () => {
       });
   });
 
-  it('should be able to update an existing user', () => {
-    user.nome = cy.generateRandomStringSimple(10);
+  it('Deve ser capaz de atualizar um usuário existente', () => {
+    body.password = cy.geradorString(6);
 
-    cy.apiPut(`${Cypress.env('apiBaseUrl')}/usuarios/${this._id}`, this.user)
+    cy.apiPut(`/usuarios/${Cypress.env('_id')}`, body)
       .then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.message).to.eq('Registro alterado com sucesso');
       });
   });
 
-  it(`${Cypress.env('apiBaseUrl')}/usuarios/${this._id}`, () => {
-    cy.apiDelete(`/pet/${this._id}`)
+  it('Deve ser capaz de excluir um usuário existente', () => {
+    cy.apiDelete(`/usuarios/${Cypress.env('_id')}`)
       .then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.message).to.eq('Registro excluído com sucesso');
       });
 
-    // Make sure the user has been deleted
-    cy.apiGet(`/pet/${this._id}`)
+    // Para ter certeza que o usuário foi excluído
+    cy.apiGet(`/usuarios/${Cypress.env('_id')}`)
       .then((response) => {
-        expect(response.status).to.eq(400); // Eu sugeriria 404 aqui
+        expect(response.status).to.eq(400);
         expect(response.body.message).to.eq('Usuário não encontrado');
       });
   });

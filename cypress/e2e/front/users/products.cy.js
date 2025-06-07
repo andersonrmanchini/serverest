@@ -1,25 +1,25 @@
 /// <reference types="cypress" />
 
-import LoginPage from '../../../pages/auth/LoginPage.js'
+import LoginPage from '../../../pages/auth/CriarAcesso.js'
 import FrontPage from '../../../pages/front/users/FrontPage.js'
 
-context('Products', () => {
+context('Produtos', () => {
 
   beforeEach(() => {
-    LoginPage.visit('/login')
+    LoginPage.visit();
     
-    LoginPage.registerLogin(
-      cy.generateRandomStringSimple(10), 
-      cy.generateRandomEmailSimple(),
-      cy.generateRandomStringSimple(6))
+    LoginPage.registrarLogin(
+      cy.geradorString(10), 
+      cy.geradorEmail(),
+      cy.geradorString(6))
   })
 
-  describe('Carrying a product to the basket', () => {
-    it('add a product to the basket', () => {
+  describe('Adicionar um produto na lista', () => {
+    it('Deve adicionar um produto na lista com sucesso', () => {
       FrontPage
-        .typingProduct('Produto')
-        .clickSearchButton()
-        .addProductAtList()
+        .pesquisarProduto('Produto')
+        .submeterPesquisa()
+        .adicionarNaLista()
 
       cy.contains('Produto').should('be.visible')
     })

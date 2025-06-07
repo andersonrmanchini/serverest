@@ -1,27 +1,27 @@
 class FrontPage {
 
-  get addListButton() {
+  get adicionarNaLista() {
     return cy.get('button[data-testid="adicionarNaLista"]')
   }
 
-  get typeProduct() {
+  get pesquisarProduto() {
     return cy.get('input[data-testid="pesquisar"]')
   }
 
-  get searchProduct() {
+  get submeterPesquisa() {
     return cy.get('button[data-testid="botaoPesquisar"]')
   }
 
-  addProductAtList() {
-    this.addListButton.click()
+  adicionarNaLista() {
+    this.adicionarNaLista.click()
   }
 
-  typingProduct (product) {
-    this.typeProduct.type(product)
+  pesquisarProduto (produto) {
+    this.pesquisarProduto.type(produto)
   }
 
-  clickSearchButton () {
-    this.searchProduct.click()
+  submeterPesquisa () {
+    this.submeterPesquisa.click()
   }
 }
 
