@@ -1,0 +1,130 @@
+name: Regressão Completa (API & E2E)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch: # Permite rodar manualmente
+
+jobs:
+  # ----------------------------------------------------------------------
+  # JOB 1: Instalação de Dependências (Necessário para todos)
+  # ----------------------------------------------------------------------
+  install_deps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências NPM
+        # 'npm ci' é mais rápido e seguro que 'npm install' no CI/CD
+        run: npm ci 
+        
+      - name: Salvar node_modules como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules
+          
+  # ----------------------------------------------------------------------
+  # JOB 2: Rodar Testes de API (Rápido)
+  # ----------------------------------------------------------------------
+  api_tests:
+    runs-on: ubuntu-latest
+    needs: install_deps # Depende do JOB de instalação
+    
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+        
+      - name: Restaurar node_modules
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules
+          
+      - name: Rodar Testes de API (Cypress Action usa Container)
+        uses: cypress-io/github-action@v6
+        with:
+          # Define o browser e o comando para rodar apenas os specs de API
+          command: npx cypress run --spec "cypress/e2e/api/**/*" --browser chrome
+          
+        env:
+          # Injeta a URL de Base de API e outros secrets
+          API_URL: ${{ secrets.API_URL }}
+          
+      # Salva o relatório JUNIT gerado pelos testes de API
+      - name: Publicar Relatório de API
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-results
+          path: cypress/results/output.xml # Caminho do seu JUNIT
+
+  # ----------------------------------------------------------------------
+  # JOB 3: Rodar Testes E2E (Mais Lento, só se API passar)
+  # ----------------------------------------------------------------------
+  e2e_tests:
+    runs-on: ubuntu-latest
+    needs: api_tests # Só roda se os testes de API tiverem sucesso
+    
+    steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+        
+      - name: Restaurar node_modules
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules
+          
+      - name: Rodar Testes E2E (Cypress Action usa Container)
+        uses: cypress-io/github-action@v6
+        with:
+          # Define o browser e o comando para rodar apenas os specs de E2E
+          command: npx cypress run --spec "cypress/e2e/front/**/*" --browser chrome
+          # Configura o baseUrl com a secret para rodar na URL correta
+          config: baseUrl=${{ secrets.BASE_URL }}
+          
+      # Salva o relatório JUNIT gerado pelos testes E2E
+      - name: Publicar Relatório de E2E
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: cypress/results/output.xml # Caminho do seu JUNIT
+
+  # ----------------------------------------------------------------------
+  # JOB 4: Publicação de Relatório (Centralizado)
+  # ----------------------------------------------------------------------
+  publish_report:
+    runs-on: ubuntu-latest
+    # Roda se o E2E for bem-sucedido ou falhar (para sempre ter o relatório)
+    needs: [api_tests, e2e_tests] 
+    if: always() # Deve sempre rodar para reportar os resultados
+    
+    steps:
+      - name: Baixar Resultados de API
+        uses: actions/download-artifact@v4
+        with:
+          name: api-results
+          path: results/api
+          
+      - name: Baixar Resultados de E2E
+        uses: actions/download-artifact@v4
+        with:
+          name: e2e-results
+          path: results/e2e
+
+      - name: Publicar Resultados de Teste (JUNIT)
+        uses: dorny/test-reporter@v1
+        with:
+          # Busca o output.xml dos dois caminhos para exibição
+          path: 'results/**/*.xml' 
+          reporter: jest-junit
+          name: Cypress Test Report
+          fail-on-error: true

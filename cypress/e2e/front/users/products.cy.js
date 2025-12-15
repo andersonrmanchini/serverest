@@ -1,27 +1,27 @@
 /// <reference types="cypress" />
 
-import LoginPage from '../../../pages/auth/CriarAcesso.js'
-import FrontPage from '../../../pages/front/users/FrontPage.js'
+import LoginPage from "../../../pages/auth/CriarAcesso.js";
+import FrontPage from "../../../pages/front/users/FrontPage.js";
 
-context('Produtos', () => {
-
+context("Produtos", () => {
   beforeEach(() => {
     LoginPage.visit();
-    
+
     LoginPage.registrarLogin(
-      cy.geradorString(10), 
-      cy.geradorEmail(),
-      cy.geradorString(6))
-  })
+      `user_${Cypress._.random(10000, 99999)}`,
+      `user_${Date.now()}@qabrazil.com`,
+      "password123",
+      true
+    );
+  });
 
-  describe('Adicionar um produto na lista', () => {
-    it('Deve adicionar um produto na lista com sucesso', () => {
-      FrontPage
-        .pesquisarProduto('Produto')
+  describe("Adicionar um produto na lista", () => {
+    it("Deve adicionar um produto na lista com sucesso", () => {
+      FrontPage.pesquisarProduto("Produto")
         .submeterPesquisa()
-        .adicionarNaLista()
+        .adicionarNaLista();
 
-      cy.contains('Produto').should('be.visible')
-    })
-  })
-})
+      cy.contains("Produto").should("be.visible");
+    });
+  });
+});

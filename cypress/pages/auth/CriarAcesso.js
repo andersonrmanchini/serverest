@@ -1,14 +1,18 @@
 class CriarAcesso {
-  get preencherNome() {
-    return cy.get('input[data-testid="cadastrar"]');
+  get cicarEmCadastrar() {
+    return cy.get('a[data-testid="cadastrar"]');
   }
-  
+
+  get preencherNome() {
+    return cy.get('input[data-testid="nome"]');
+  }
+
   get preencherEmail() {
     return cy.get('input[data-testid="email"]');
   }
 
   get preencherSenha() {
-    return cy.get('input[data-testid="senha"]');
+    return cy.get('input[data-testid="password"]');
   }
 
   get logarAplicacao() {
@@ -20,11 +24,11 @@ class CriarAcesso {
   }
 
   get errorMessage() {
-    return cy.get('.error-message');
+    return cy.get(".error-message");
   }
 
   visit() {
-    cy.visit('/');
+    cy.visit("/");
   }
 
   login(email, senha) {
@@ -34,11 +38,13 @@ class CriarAcesso {
   }
 
   registrarLogin(nome, email, senha, admin = false) {
+    this.cicarEmCadastrar.click();
+    cy.url().should("include", "/cadastrarusuarios");
+
     this.preencherNome.type(nome);
     this.preencherEmail.type(email);
     this.preencherSenha.type(senha);
-    if (admin == true)
-      this.setarAdministrador.check();
+    if (admin == true) this.setarAdministrador.check();
     this.logarAplicacao.click();
   }
 }

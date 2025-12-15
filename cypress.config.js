@@ -1,16 +1,24 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
+  projectId: "shjmm3",
   e2e: {
-    baseUrl: 'https://front.serverest.dev/',
+    baseUrl: Cypress.env('BASE_URL'),
     env: {
-      apiBaseUrl: 'https://serverest.dev/'
+      apiBaseUrl: Cypress.env('API_URL'),
     },
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}', 
-    supportFile: 'cypress/support/e2e.js', 
-    
+    defaultCommandTimeout: 8000,
+    specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
+    supportFile: "cypress/support/e2e.js",
+
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+
+    reporter: 'junit', 
+    reporterOptions: {
+      mochaFile: 'cypress/results/output.xml',
+      toConsole: true,
+    }
   },
 });
