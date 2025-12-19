@@ -28,7 +28,8 @@ class CriarAcesso {
   }
 
   visit() {
-    cy.visit("/");
+    cy.log("Visiting the application: " + Cypress.env("BASE_URL"));
+    cy.visit(Cypress.env("BASE_URL") || "/");
   }
 
   login(email, senha) {

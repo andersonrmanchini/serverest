@@ -20,11 +20,11 @@ class CadastrarUsuario {
     return cy.get('button[type="submit"]')
   }
 
-  registerUser(nome, email, senha, admin = false) {
-    this.preencherNome.input(nome);
-    this.preencherEmail.input(email);
-    this.preencherSenha.input(senha);
-    if (admin == true)
+  cadastrarNovoUsuario(nome, email, senha, admin = false) {
+    if (nome) this.preencherNome.type(nome);
+    if (email) this.preencherEmail.type(email);
+    if (senha) this.preencherSenha.type(senha);
+    if (admin)
       this.setarAdministrador.check();
     this.submit.click();
   }

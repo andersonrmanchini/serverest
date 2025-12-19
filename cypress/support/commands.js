@@ -2,14 +2,6 @@
 // cypress/support/command.js
 // ***********************************************
 
-// Cria um e-mail fake
-Cypress.Commands.add("geradorEmail", () => {
-  const timestamp = new Date().getTime();
-  const randomString = Math.random().toString(36).substring(2, 8);
-
-  return cy.wrap(`user_${timestamp}_${randomString}@example.com`);
-});
-
 // Gera uma string qualquer
 Cypress.Commands.add("geradorString", (length = 10) => {
   return cy.wrap(
