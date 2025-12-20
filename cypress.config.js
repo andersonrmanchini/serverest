@@ -6,7 +6,7 @@ module.exports = defineConfig({
     baseUrl: process.env.BASE_URL,
     env: {
       baseUrl: process.env.BASE_URL,
-      apiBaseUrl: process.env.API_URL,
+      apiBaseUrl: process.env.API_BASE,
     },
     defaultCommandTimeout: 8000,
     specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
@@ -17,6 +17,8 @@ module.exports = defineConfig({
         ...config.env,
         ...process.env,
       }
+
+      return config;
     },
 
     reporter: 'junit', 

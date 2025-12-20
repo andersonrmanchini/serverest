@@ -51,11 +51,12 @@ Cypress.Commands.add("cadastrarProduto", (admin = true) => {
 
 Cypress.Commands.add(
   "apiGet",
-  (url, parameters = null, failOnStatusCode = false) => {
+  (uri, failOnStatusCode = false) => {
+    const url = `${Cypress.env("API_BASE")}${uri}`;
+   
     return cy.request({
       method: "GET",
-      url: Cypress.env("apiBaseUrl") + url,
-      qs: parameters,
+      url: url,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -67,10 +68,12 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "apiPost",
-  (url, bodyRequest, failOnStatusCode = false) => {
+  (uri, bodyRequest, failOnStatusCode = false) => {
+    const url = `${Cypress.env("API_BASE")}${uri}`;
+    
     return cy.request({
       method: "POST",
-      url: Cypress.env("apiBaseUrl") + url,
+      url: url,
       body: bodyRequest,
       headers: {
         "Content-Type": "application/json",
@@ -81,10 +84,12 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("apiPut", (url, bodyRequest, failOnStatusCode = false) => {
+Cypress.Commands.add("apiPut", (uri, bodyRequest, failOnStatusCode = false) => {
+  const url = `${Cypress.env("API_BASE")}${uri}`;
+
   return cy.request({
     method: "PUT",
-    url: Cypress.env("apiBaseUrl") + url,
+    url: url,
     body: bodyRequest,
     headers: {
       "Content-Type": "application/json",
@@ -94,10 +99,12 @@ Cypress.Commands.add("apiPut", (url, bodyRequest, failOnStatusCode = false) => {
   });
 });
 
-Cypress.Commands.add("apiDelete", (url, failOnStatusCode = false) => {
+Cypress.Commands.add("apiDelete", (uri, failOnStatusCode = false) => {
+  const url = `${Cypress.env("API_BASE")}${uri}`;
+
   return cy.request({
     method: "DELETE",
-    url: Cypress.env("apiBaseUrl") + url,
+    url: url,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Instalar dependências NPM
         # 'npm ci' é mais rápido e seguro que 'npm install' no CI/CD
@@ -57,7 +58,7 @@ jobs:
           
         env:
           # Injeta a URL de Base de API e outros secrets
-          API_URL: ${{ secrets.API_URL }}
+          API_BASE: ${{ secrets.API_BASE }}
           
       # Salva o relatório JUNIT gerado pelos testes de API
       - name: Publicar Relatório de API
@@ -90,6 +91,10 @@ jobs:
           command: npx cypress run --spec "cypress/e2e/front/**/*" --browser chrome
           # Configura o baseUrl com a secret para rodar na URL correta
           config: baseUrl=${{ secrets.BASE_URL }}
+          
+        env:
+          # Necessário se seus testes E2E fazem chamadas de API (cy.request / cy.apiPost)
+          API_BASE: ${{ secrets.API_BASE }}
           
       # Salva o relatório JUNIT gerado pelos testes E2E
       - name: Publicar Relatório de E2E
