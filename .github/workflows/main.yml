@@ -54,7 +54,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Define o browser e o comando para rodar apenas os specs de API
-          command: npx cypress run --spec "cypress/e2e/api/**/*.cy.js" --browser chrome
+          command: npx cypress run --spec cypress/e2e/api/**/*.cy.js --browser chrome
           
         env:
           # Injeta a URL de Base de API e outros secrets
@@ -88,7 +88,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Define o browser e o comando para rodar apenas os specs de E2E
-          command: npx cypress run --spec "cypress/e2e/front/**/*" --browser chrome
+          command: npx cypress run --spec cypress/e2e/front/**/* --browser chrome
           # Configura o baseUrl com a secret para rodar na URL correta
           config: baseUrl=${{ secrets.BASE_URL }}
           
