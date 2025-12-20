@@ -54,7 +54,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Define o browser e o comando para rodar apenas os specs de API
-          command: npx cypress run --spec "cypress/e2e/api/*" --browser chrome
+          command: npx cypress run --spec "cypress/e2e/api/**/*.cy.js" --browser chrome
           
         env:
           # Injeta a URL de Base de API e outros secrets
