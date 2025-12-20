@@ -62,6 +62,7 @@ jobs:
           
       # Salva o relatório JUNIT gerado pelos testes de API
       - name: Publicar Relatório de API
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: api-results
@@ -98,6 +99,7 @@ jobs:
           
       # Salva o relatório JUNIT gerado pelos testes E2E
       - name: Publicar Relatório de E2E
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: e2e-results

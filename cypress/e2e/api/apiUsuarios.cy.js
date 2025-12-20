@@ -44,7 +44,7 @@ describe("Usuários: Testes de API", () => {
       });
     });
 
-    it("Deve ser capaz de atualizar um usuário existente", () => {
+    it("Atualizar um usuário existente", () => {
       usuarioAtual.password = "password456"; // Atualizando a senha
 
       UsuariosService.alterar(id, usuarioAtual).then((response) => {
@@ -53,7 +53,7 @@ describe("Usuários: Testes de API", () => {
       });
     });
 
-    it("Deve ser capaz de excluir um usuário existente", () => {
+    it("Excluir um usuário existente", () => {
       UsuariosService.deletar(id).then((response) => {
         expect(response.status).to.eq(200);
         expect(response.body.message).to.eq("Registro excluído com sucesso");
