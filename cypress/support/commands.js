@@ -1,5 +1,5 @@
-import { gerarUsuario } from '../constants/gerarUsuario.js';
-import LoginPage from '../pages/auth/LoginPage.js';
+import { gerarUsuario } from "../constants/gerarUsuario.js";
+import LoginPage from "../pages/auth/LoginPage.js";
 import { gerarProduto } from "../constants/gerarProduto.js";
 import FrontPage from "../pages/front/admin/FrontPage.js";
 import CadastrarProduto from "../pages/front/admin/CadastrarProduto.js";
