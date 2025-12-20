@@ -1,5 +1,5 @@
 class LoginPage {
-  get cicarEmCadastrar() {
+  get clicarEmCadastrar() {
     return cy.get('a[data-testid="cadastrar"]');
   }
 
@@ -46,7 +46,7 @@ class LoginPage {
   }
 
   registrarLogin(nome, email, senha, admin = false) {
-    this.cicarEmCadastrar.click();
+    this.clicarEmCadastrar.click();
     cy.url().should("include", "/cadastrarusuarios");
 
     this.preencherNome.type(nome);
