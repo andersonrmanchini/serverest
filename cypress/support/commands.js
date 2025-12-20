@@ -1,14 +1,13 @@
+import { gerarUsuario } from "../constants/gerarUsuario.js";
+import LoginPage from "../pages/auth/loginPage.js";
+import { gerarProduto } from "../constants/gerarProduto.js";
+import FrontPage from "../pages/front/admin/FrontPage.js";
+import CadastrarProduto from "../pages/front/admin/CadastrarProduto.js";
+
+
 // ***********************************************
 // cypress/support/command.js
 // ***********************************************
-
-// Cria um e-mail fake
-Cypress.Commands.add("geradorEmail", () => {
-  const timestamp = new Date().getTime();
-  const randomString = Math.random().toString(36).substring(2, 8);
-
-  return cy.wrap(`user_${timestamp}_${randomString}@example.com`);
-});
 
 // Gera uma string qualquer
 Cypress.Commands.add("geradorString", (length = 10) => {
@@ -26,13 +25,38 @@ Cypress.Commands.add("GeradorNumeroDecimal", () => {
   
 });
 
+Cypress.Commands.add("loginAsAdmin", (admin = true) => {
+  const usuarioAdmin = gerarUsuario();
+  
+  LoginPage.visit();
+  LoginPage.registrarLogin(
+    usuarioAdmin.nome,
+    usuarioAdmin.email,
+    usuarioAdmin.senha,
+    admin
+  );
+
+  return cy.wrap(usuarioAdmin);
+});
+
+Cypress.Commands.add("cadastrarProduto", (admin = true) => { 
+  FrontPage.clicarEmCadastrarProduto();
+  CadastrarProduto.cadastrarNovoProduto(
+    gerarProduto.nome,
+    gerarProduto.preco,
+    gerarProduto.descricao,
+    gerarProduto.quantidade
+  );
+});
+
 Cypress.Commands.add(
   "apiGet",
-  (url, parameters = null, failOnStatusCode = false) => {
+  (uri, failOnStatusCode = false) => {
+    const url = `${Cypress.env("API_BASE")}${uri}`;
+   
     return cy.request({
       method: "GET",
-      url: Cypress.env("apiBaseUrl") + url,
-      qs: parameters,
+      url: url,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -44,10 +68,12 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   "apiPost",
-  (url, bodyRequest, failOnStatusCode = false) => {
+  (uri, bodyRequest, failOnStatusCode = false) => {
+    const url = `${Cypress.env("API_BASE")}${uri}`;
+    
     return cy.request({
       method: "POST",
-      url: Cypress.env("apiBaseUrl") + url,
+      url: url,
       body: bodyRequest,
       headers: {
         "Content-Type": "application/json",
@@ -58,10 +84,12 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add("apiPut", (url, bodyRequest, failOnStatusCode = false) => {
+Cypress.Commands.add("apiPut", (uri, bodyRequest, failOnStatusCode = false) => {
+  const url = `${Cypress.env("API_BASE")}${uri}`;
+
   return cy.request({
     method: "PUT",
-    url: Cypress.env("apiBaseUrl") + url,
+    url: url,
     body: bodyRequest,
     headers: {
       "Content-Type": "application/json",
@@ -71,10 +99,12 @@ Cypress.Commands.add("apiPut", (url, bodyRequest, failOnStatusCode = false) => {
   });
 });
 
-Cypress.Commands.add("apiDelete", (url, failOnStatusCode = false) => {
+Cypress.Commands.add("apiDelete", (uri, failOnStatusCode = false) => {
+  const url = `${Cypress.env("API_BASE")}${uri}`;
+
   return cy.request({
     method: "DELETE",
-    url: Cypress.env("apiBaseUrl") + url,
+    url: url,
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

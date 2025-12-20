@@ -3,16 +3,22 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   projectId: "shjmm3",
   e2e: {
-    baseUrl: Cypress.env('BASE_URL'),
+    baseUrl: process.env.BASE_URL,
     env: {
-      apiBaseUrl: Cypress.env('API_URL'),
+      baseUrl: process.env.BASE_URL,
+      apiBaseUrl: process.env.API_BASE,
     },
     defaultCommandTimeout: 8000,
     specPattern: "cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/e2e.js",
 
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+        config.env = {
+        ...config.env,
+        ...process.env,
+      }
+
+      return config;
     },
 
     reporter: 'junit', 

@@ -21,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Instalar dependências NPM
         # 'npm ci' é mais rápido e seguro que 'npm install' no CI/CD
@@ -53,14 +54,15 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Define o browser e o comando para rodar apenas os specs de API
-          command: npx cypress run --spec "cypress/e2e/api/**/*" --browser chrome
+          command: npx cypress run --spec cypress/e2e/api/**/*.cy.js --browser chrome
           
         env:
           # Injeta a URL de Base de API e outros secrets
-          API_URL: ${{ secrets.API_URL }}
+          API_BASE: ${{ secrets.API_BASE }}
           
       # Salva o relatório JUNIT gerado pelos testes de API
       - name: Publicar Relatório de API
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: api-results
@@ -87,12 +89,17 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Define o browser e o comando para rodar apenas os specs de E2E
-          command: npx cypress run --spec "cypress/e2e/front/**/*" --browser chrome
+          command: npx cypress run --spec cypress/e2e/front/**/* --browser chrome
           # Configura o baseUrl com a secret para rodar na URL correta
           config: baseUrl=${{ secrets.BASE_URL }}
           
+        env:
+          # Necessário se seus testes E2E fazem chamadas de API (cy.request / cy.apiPost)
+          API_BASE: ${{ secrets.API_BASE }}
+          
       # Salva o relatório JUNIT gerado pelos testes E2E
       - name: Publicar Relatório de E2E
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: e2e-results
@@ -107,7 +114,17 @@ jobs:
     needs: [api_tests, e2e_tests] 
     if: always() # Deve sempre rodar para reportar os resultados
     
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
+      
     steps:
+      - name: Checkout Código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Baixar Resultados de API
         uses: actions/download-artifact@v4
         with:

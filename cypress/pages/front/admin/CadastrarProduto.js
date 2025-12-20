@@ -20,11 +20,11 @@ class CadastrarProduto {
     return cy.get('button[type="submit"]')
   }
 
-  cadastrarProduto(nome, preco, descricao, quantidade) {
-    this.preencherNome.input(nome);
-    this.preencherPreco.input(preco);
-    this.preencherDescricao.input(descricao);
-    this.preencherQuantidade.input(quantidade);
+  cadastrarNovoProduto(nome, preco, descricao, quantidade) {
+    if (nome) this.preencherNome.type(nome);
+    if (preco) this.preencherPreco.type(preco);
+    if (descricao) this.preencherDescricao.type(descricao);
+    if (quantidade) this.preencherQuantidade.type(quantidade);
     this.submit.click();
   }
 }

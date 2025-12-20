@@ -1,18 +1,18 @@
 class FrontPage {
 
   get cadastrarUsuario() {
-    return cy.get('button[data-testid="cadastrarUsuarios"]')
+    return cy.get('a[data-testid="cadastrarUsuarios"]')
   }
 
   get cadastrarProduto() {
-    return cy.get('button[data-testid="cadastrarProdutos"]')
+    return cy.get('a[data-testid="cadastrarProdutos"]')
   }
 
-  cadastrarUsuario() {
+  clicarEmCadastrarUsuario() {
     this.cadastrarUsuario.click()
   }
 
-  cadastrarProduto() {
+  clicarEmCadastrarProduto() {
     this.cadastrarProduto.click()
   }
 }
