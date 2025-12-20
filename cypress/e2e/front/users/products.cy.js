@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import LoginPage from "../../../pages/auth/LoginPage.js";
+import LoginPage from "../../../pages/auth/loginPage.js";
 import FrontPage from "../../../pages/front/users/FrontPage.js";
 
 context("Produtos", () => {
