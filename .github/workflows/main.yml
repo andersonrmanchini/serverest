@@ -114,6 +114,11 @@ jobs:
     needs: [api_tests, e2e_tests] 
     if: always() # Deve sempre rodar para reportar os resultados
     
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
+      
     steps:
       - name: Checkout Código
         uses: actions/checkout@v4
