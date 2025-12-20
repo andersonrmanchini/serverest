@@ -1,3 +1,10 @@
+import { gerarUsuario } from '../constants/gerarUsuario.js';
+import LoginPage from '../pages/auth/LoginPage.js';
+import { gerarProduto } from "../constants/gerarProduto.js";
+import FrontPage from "../pages/front/admin/FrontPage.js";
+import CadastrarProduto from "../pages/front/admin/CadastrarProduto.js";
+
+
 // ***********************************************
 // cypress/support/command.js
 // ***********************************************
@@ -16,6 +23,30 @@ Cypress.Commands.add("GeradorNumeroDecimal", () => {
   const scaledNumber = Math.random() * 150 + 50;
   return parseFloat(scaledNumber.toFixed(2));
   
+});
+
+Cypress.Commands.add("loginAsAdmin", (admin = true) => {
+  const usuarioAdmin = gerarUsuario();
+  
+  LoginPage.visit();
+  LoginPage.registrarLogin(
+    usuarioAdmin.nome,
+    usuarioAdmin.email,
+    usuarioAdmin.senha,
+    admin
+  );
+
+  return cy.wrap(usuarioAdmin);
+});
+
+Cypress.Commands.add("cadastrarProduto", (admin = true) => { 
+  FrontPage.clicarEmCadastrarProduto();
+  CadastrarProduto.cadastrarNovoProduto(
+    gerarProduto.nome,
+    gerarProduto.preco,
+    gerarProduto.descricao,
+    gerarProduto.quantidade
+  );
 });
 
 Cypress.Commands.add(

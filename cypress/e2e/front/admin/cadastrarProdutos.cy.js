@@ -1,61 +1,39 @@
 /// <reference types="cypress" />
 
-import LoginPage from "../../../pages/auth/CriarAcesso.js";
+import { gerarProduto } from "../../../constants/gerarProduto.js";
 import FrontPage from "../../../pages/front/admin/FrontPage.js";
 import CadastrarProduto from "../../../pages/front/admin/CadastrarProduto.js";
 
 context("Produtos", () => {
   beforeEach(() => {
-    const nome = `user_${Cypress._.random(10000, 99999)}`;
-    const email = `user_${Date.now()}@qabrazil.com`;
-
-    LoginPage.visit();
-
-    LoginPage.registrarLogin(nome, email, "password123", true);
-
-    cy.contains("Cadastro realizado com sucesso").should("be.visible");
-    cy.contains(`Bem Vindo ${nome}`).should("be.visible");
+    cy.loginAsAdmin();
   });
 
-  describe("Testes para cadastro de produtos", () => {
-    it("Deve registrar um novo produto com sucesso", () => {
-      FrontPage.cadastrarProduto();
+  describe("Cadastrar um produto", () => {
+    it("Registrar um novo produto com sucesso", () => {
+      FrontPage.clicarEmCadastrarProduto();
 
-      const prd = {
-        nome: cy.geradorString(10),
-        preco: cy.geradorNumeroDecimal(),
-        descricao: cy.geradorString(100),
-        quantidade: Math.random * 150 + 50,
-      };
-
-      CadastrarProduto.cadastrarProduto(
-        prd.nome,
-        prd.preco,
-        prd.descricao,
-        prd.quantidade
+      CadastrarProduto.cadastrarNovoProduto(
+        gerarProduto.nome,
+        gerarProduto.preco,
+        gerarProduto.descricao,
+        gerarProduto.quantidade
       );
 
-      cy.contains(prd.nome).should("be.visible");
-      cy.contains(prd.preco).should("be.visible");
-      cy.contains(prd.descricao).should("be.visible");
-      cy.contains(prd.quantidade).should("be.visible");
+      cy.contains(gerarProduto.nome).should("be.visible");
+      cy.contains(gerarProduto.preco).should("be.visible");
+      cy.contains(gerarProduto.descricao).should("be.visible");
+      cy.contains(gerarProduto.quantidade).should("be.visible");
     });
 
-    it("Deve mostrar mensagem ao tentar cadastrar produto sem nome", () => {
-      FrontPage.cadastrarProduto();
+    it("Informar a obgatoriedade do campo de nome do produto", () => {
+      FrontPage.clicarEmCadastrarProduto();
 
-      const prd = {
-        nome: "",
-        preco: cy.geradorNumeroDecimal(),
-        descricao: cy.geradorString(100),
-        quantidade: Math.random * 150 + 50,
-      };
-
-      CadastrarProduto.cadastrarProduto(
-        prd.nome,
-        prd.preco,
-        prd.descricao,
-        prd.quantidade
+      CadastrarProduto.cadastrarNovoProduto(
+        "",
+        gerarProduto.preco,
+        gerarProduto.descricao,
+        gerarProduto.quantidade
       );
 
       cy.contains("Nome é obrigatório").should("be.visible");

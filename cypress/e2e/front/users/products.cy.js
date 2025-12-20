@@ -1,27 +1,26 @@
 /// <reference types="cypress" />
 
-import LoginPage from "../../../pages/auth/CriarAcesso.js";
+import LoginPage from "../../../pages/auth/LoginPage.js";
 import FrontPage from "../../../pages/front/users/FrontPage.js";
 
 context("Produtos", () => {
   beforeEach(() => {
-    LoginPage.visit();
-
-    LoginPage.registrarLogin(
-      `user_${Cypress._.random(10000, 99999)}`,
-      `user_${Date.now()}@qabrazil.com`,
-      "password123",
-      true
-    );
+    cy.loginAsAdmin();
+    cy.cadastrarProduto();
+    LoginPage.logout();
+    cy.loginAsAdmin(false);
+    cy.contains("Serverest Store", { timeout: 10000 })
+      .should('be.visible');
   });
 
-  describe("Adicionar um produto na lista", () => {
-    it("Deve adicionar um produto na lista com sucesso", () => {
-      FrontPage.pesquisarProduto("Produto")
-        .submeterPesquisa()
-        .adicionarNaLista();
+  describe("Procurando por um produto na lista", () => {
+    it("Procurar um produto na lista com sucesso", () => {
+      const produto = "testing_product_";
+      FrontPage.preencherNomeDoProduto(produto);
+      FrontPage.pesquisarProduto();
+      FrontPage.adicionarNaLista();
 
-      cy.contains("Produto").should("be.visible");
+      cy.contains(produto).should("be.visible");
     });
   });
 });

@@ -1,46 +1,38 @@
 /// <reference types="cypress" />
 
-import { gerarUsuario } from "../../../constants/Usuario.js";
-import LoginPage from "../../../pages/auth/CriarAcesso.js";
+import { gerarUsuario } from "../../../constants/gerarUsuario.js";
 import FrontPage from "../../../pages/front/admin/FrontPage.js";
 import CadastrarUsuario from "../../../pages/front/admin/CadastrarUsuario.js";
 
-context("Users", () => {
+context("Usuários", () => {
   beforeEach(() => {
-    const nome = `user_${Cypress._.random(10000, 99999)}`;
-    const email = `user_${Date.now()}@qabrazil.com`;
-
-    LoginPage.visit();
-    LoginPage.registrarLogin(nome, email, "password123", true);
-
-    cy.contains("Cadastro realizado com sucesso").should("be.visible");
-    cy.contains(`Bem Vindo ${nome}`).should("be.visible");
+    cy.loginAsAdmin();
   });
 
-  describe("Testes para cadastro de usuários", () => {
-    it("Deve cadastrar um usuário com sucesso", () => {
+  describe("Cadastrar um usuário", () => {
+    it("Cadastrar um usuário com sucesso", () => {
+      const novoUsuario = gerarUsuario(); // Gera um novo usuário para o teste
       FrontPage.clicarEmCadastrarUsuario();
       cy.contains("Cadastro de usuários").should("be.visible");
 
       CadastrarUsuario.cadastrarNovoUsuario(
-        gerarUsuario.nome, 
-        gerarUsuario.email, 
-        gerarUsuario.senha, 
+        novoUsuario.nome, 
+        novoUsuario.email, 
+        novoUsuario.senha, 
         true);
 
-      cy.contains(gerarUsuario.nome).should("be.visible");
-      cy.contains(gerarUsuario.email).should("be.visible");
-      cy.contains(gerarUsuario.senha).should("be.visible");
+      cy.contains(novoUsuario.nome).should("be.visible");
+      cy.contains(novoUsuario.email).should("be.visible");
     });
 
-    it("Deve informar falta de email ao tentar cadastrar um usuário", () => {
+    it("Informar a obgatoriedade do campo de email", () => {
       FrontPage.clicarEmCadastrarUsuario();
       cy.contains("Cadastro de usuários").should("be.visible");
 
       CadastrarUsuario.cadastrarNovoUsuario(
-        gerarUsuario.nome, 
+        "Nome para teste sem email", 
         "", 
-        gerarUsuario.senha, 
+        "senha", 
         true);
 
       cy.contains("Email é obrigatório").should("be.visible");

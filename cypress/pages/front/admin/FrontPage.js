@@ -9,7 +9,6 @@ class FrontPage {
   }
 
   clicarEmCadastrarUsuario() {
-    cy.log(this.cadastrarUsuario)
     this.cadastrarUsuario.click()
   }
 

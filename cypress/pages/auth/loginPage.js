@@ -1,4 +1,4 @@
-class CriarAcesso {
+class LoginPage {
   get cicarEmCadastrar() {
     return cy.get('a[data-testid="cadastrar"]');
   }
@@ -15,7 +15,7 @@ class CriarAcesso {
     return cy.get('input[data-testid="password"]');
   }
 
-  get logarAplicacao() {
+  get loginButton() {
     return cy.get('button[type="submit"]');
   }
 
@@ -23,19 +23,26 @@ class CriarAcesso {
     return cy.get('input[data-testid="checkbox"]');
   }
 
+  get logoutButton() {
+    return cy.get('button[data-testid="logout"]');
+  }
+
   get errorMessage() {
     return cy.get(".error-message");
   }
 
   visit() {
-    cy.log("Visiting the application: " + Cypress.env("BASE_URL"));
     cy.visit(Cypress.env("BASE_URL") || "/");
+  }
+
+  logout() {
+    this.logoutButton.click();
   }
 
   login(email, senha) {
     this.preencherEmail.type(email);
     this.preencherSenha.type(senha);
-    this.logarAplicacao.click();
+    this.loginButton.click();
   }
 
   registrarLogin(nome, email, senha, admin = false) {
@@ -46,8 +53,8 @@ class CriarAcesso {
     this.preencherEmail.type(email);
     this.preencherSenha.type(senha);
     if (admin == true) this.setarAdministrador.check();
-    this.logarAplicacao.click();
+    this.loginButton.click();
   }
 }
 
-export default new CriarAcesso();
+export default new LoginPage();
