@@ -1,11 +1,3 @@
------
-
-Com certeza\! Um bom README é essencial para qualquer projeto, especialmente para automação de testes, pois ajuda outros desenvolvedores (e você mesmo, no futuro) a entenderem, configurarem e executarem os testes.
-
-Aqui está um modelo de README para o seu projeto de automação de testes Cypress, com seções que você pode preencher e adaptar:
-
------
-
 # 🧪 Cypress API & E2E Test Automation Framework
 
 -----
